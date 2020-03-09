@@ -1,0 +1,6 @@
+PATH_TO_NEW_FOLDER=$1
+cp -r $PWD/amiq_reg_agent $PATH_TO_NEW_FOLDER
+
+
+
+
