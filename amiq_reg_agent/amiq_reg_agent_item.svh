@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * NAME:        amiq_reg_agent.svh
+ * NAME:        amiq_reg_agent_item.svh
  * PROJECT:     amiq_reg_agent
  * Description: The item class
  *******************************************************************************/
