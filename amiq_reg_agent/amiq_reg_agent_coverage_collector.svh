@@ -17,15 +17,16 @@
  * PROJECT:     amiq_reg_agent
  * Description: The coverage collector component class for storing coverage info
  *******************************************************************************/
+
+// coverage container class
 class reg_covergroup;
 	
 	local uvm_reg_addr_t 				 valid_addr[$];
 	local uvm_reg_addr_t 				 past_addr = 0;
 	local uvm_reg_addr_t 				 indexes[$];
 	
-	covergroup reg_cg with function sample(uvm_reg_bus_op reg_bus_op);
-		option.per_instance = 1; 
-		
+	covergroup access_reg_cg with function sample(uvm_reg_bus_op reg_bus_op);		
+		option.per_instance = 1;
 		register_addr_cp: coverpoint reg_bus_op.addr{
 			bins addrs_bins[] = valid_addr;
 		}
@@ -34,13 +35,25 @@ class reg_covergroup;
 			bins access_transition[] = (UVM_READ, UVM_WRITE => UVM_READ, UVM_WRITE);
 		}
 		
-		access_on_every_address: cross register_addr_cp, register_access_kind_cp iff(past_addr == reg_bus_op.addr);
+		access_on_every_address_cr: cross register_addr_cp, register_access_kind_cp iff(past_addr == reg_bus_op.addr);
+		
+		walking_1_cp: coverpoint $clog2(reg_bus_op.data) iff(reg_bus_op.kind == UVM_WRITE && $onehot(reg_bus_op.data))
+		{
+			bins walking_1_data[] = {[0:`UVM_REG_DATA_WIDTH - 1]};
+			option.weight = 0;
+		}
+		
+		walking_1_on_every_address_cr: cross register_addr_cp, walking_1_cp;
+		
+		
+		
 	endgroup
+	
 	
 	function void sample_cg(uvm_reg_bus_op reg_bus_op);
 		indexes = valid_addr.find(iterator) with (iterator == reg_bus_op.addr);
 		if(indexes.size()) begin
-			reg_cg.sample(reg_bus_op);
+			access_reg_cg.sample(reg_bus_op);
 			past_addr = reg_bus_op.addr;
 		end
 		indexes.delete();
@@ -48,12 +61,12 @@ class reg_covergroup;
 	
 	function new(uvm_reg_addr_t valid_addr[$], string name);
 		this.valid_addr = valid_addr;
-		reg_cg = new(); 
-		reg_cg.set_inst_name(name);
+		access_reg_cg = new(); 
+		access_reg_cg.set_inst_name(name);
 	endfunction
 endclass
 
-
+// class containing logic for coverage collection
 class amiq_reg_agent_coverage_collector extends uvm_component;
 	`uvm_component_utils(amiq_reg_agent_coverage_collector)	
 	
@@ -87,7 +100,8 @@ class amiq_reg_agent_coverage_collector extends uvm_component;
 			
 		reg_op.addr = register_of_reg_item.get_address();
 		reg_op.kind = reg_item.kind;
+		if(reg_op.kind == UVM_WRITE)
+			reg_op.data = reg_item.value[0];
 		reg_cg.sample_cg(reg_op);
-	endfunction
-	
+	endfunction	
 endclass
