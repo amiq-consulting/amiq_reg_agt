@@ -18,7 +18,7 @@
  * Description: The configuration object class
  *******************************************************************************/
 
-
+// configuration class for the register agent
 class amiq_reg_agent_cfg_object extends uvm_object;
 	`uvm_object_utils(amiq_reg_agent_cfg_object)
 
