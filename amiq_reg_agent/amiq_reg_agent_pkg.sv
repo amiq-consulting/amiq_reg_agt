@@ -28,10 +28,10 @@ package amiq_reg_agent_pkg;
 	 import uvm_pkg::*;
 	 
 	`include "amiq_reg_agent_item.svh" 
+	`include "amiq_reg_agent_cfg_object.svh"
 	`include "amiq_reg_sequencer.svh"
 	`include "amiq_reg_sequence_lib.svh"
 	`include "amiq_reg_agent_coverage_collector.svh"
-	`include "amiq_reg_agent_cfg_object.svh"
 	`include "amiq_reg_agent.svh"
 	
 endpackage
