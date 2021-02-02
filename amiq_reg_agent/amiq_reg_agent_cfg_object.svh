@@ -30,6 +30,9 @@ class amiq_reg_agent_cfg_object extends uvm_object;
 	bit				 has_coverage = 1;
 	bit				 has_checks   = 1;
 	string	 		 skip_list[$];
+	
+	uvm_verbosity    reg_agent_verbosity = UVM_LOW;
+	
 	uvm_reg_addr_t   lower_unmaped_space = 0;
 	//maximum accessible address 
 	uvm_reg_addr_t   upper_unmaped_space = uvm_reg_addr_t'(-1);
