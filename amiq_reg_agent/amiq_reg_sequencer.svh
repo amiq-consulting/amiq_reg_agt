@@ -18,6 +18,7 @@
  * Description: The sequencer class
  *******************************************************************************/
 
+// sequencer class
 class amiq_reg_sequencer extends uvm_sequencer#(uvm_sequence); 
 	`uvm_component_utils(amiq_reg_sequencer)
 	
@@ -28,5 +29,5 @@ class amiq_reg_sequencer extends uvm_sequencer#(uvm_sequence);
 	uvm_reg 					 reg_array[$];
 	uvm_reg_block 				 reg_block;
 	uvm_reg_map_addr_range 		 invalid_addr_ranges[$];
-	
+	amiq_reg_agent_cfg_object    reg_agent_config_object;
 endclass
